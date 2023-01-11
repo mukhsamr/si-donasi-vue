@@ -72,7 +72,7 @@ async function pay() {
 
         let parameter = {
             "transaction_details": {
-                "order_id": form.kategori + '-' + Math.floor(new Date().getTime() / 1000),
+                "order_id": store.infaq_id + '-' + form.kategori + '-' + Math.floor(new Date().getTime() / 1000),
                 "gross_amount": form.nominal
             },
             "credit_card": {
@@ -113,6 +113,7 @@ async function pay() {
                 alert("Menunggu Pembayaran!")
             },
             onError: function (res) {
+                save(res)
                 alert("Pembayaran Gagal!")
             },
             onClose: function () {

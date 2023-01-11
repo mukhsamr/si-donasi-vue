@@ -97,7 +97,8 @@ onBeforeMount(async () => data.value = await Infaq.all())
                         </div>
                         <div>
                             <div class="font-weight-bold text-disabled">Dibutuhkan</div>
-                            <div class="font-weight-bold">Rp. {{ item.target.toLocaleString('id') }}</div>
+                            <div class="font-weight-bold">Rp. {{ new Intl.NumberFormat('id-ID').format(item.target) }}
+                            </div>
                         </div>
                     </div>
                 </div>
