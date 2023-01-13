@@ -42,8 +42,7 @@ onBeforeMount(async () => laporan.value = await Laporan.all())
 
     <template v-for="(item, i) in laporan" :key="i">
         <div>
-            <v-list-item :title="item.bulan" :subtitle="(new Date(item.created)).toLocaleDateString()" class="py-3"
-                :to="'/laporan-find/' + item.id">
+            <v-list-item :title="item.bulan" :subtitle="item.created" class="py-3" :to="'/laporan-find/' + item.id">
                 <template v-slot:prepend>
                     <v-avatar color="blue">
                         <v-icon color="white">mdi-clipboard-text</v-icon>

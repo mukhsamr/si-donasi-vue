@@ -55,7 +55,7 @@ onBeforeMount(async () => data.value = await Berita.all())
                 </v-img>
 
                 <v-card-subtitle class="pt-4">
-                    Dibuat: {{ (new Date(item.created)).toLocaleDateString() }}
+                    {{ item.created }}
                 </v-card-subtitle>
 
                 <v-card-text>

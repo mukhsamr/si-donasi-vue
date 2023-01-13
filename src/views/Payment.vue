@@ -174,7 +174,7 @@ onBeforeMount(async () => {
             Bayar Sekarang
         </v-btn>
         <v-btn type="submit" color="primary" class="mt-4" v-else disabled>
-            <v-progress-circular indeterminate></v-progress-circular>
+            <v-progress-circular indeterminate />
         </v-btn>
     </v-form>
 </template>

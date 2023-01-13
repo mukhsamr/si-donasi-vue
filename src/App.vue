@@ -6,10 +6,9 @@ import Sanctum from "@/api/Sanctum";
 import Footnote from "@/components/Footnote.vue";
 import Bottom from "@/components/Bottom.vue";
 
-const drawer = ref(true)
-
 const username = ref()
 const isMobile = document.body.clientWidth <= 425
+const drawer = ref(!isMobile)
 
 
 async function logout() {

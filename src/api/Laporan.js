@@ -4,6 +4,13 @@ const url = '/api/laporan'
 
 export default class Laporan {
 
+    // Get bulan
+    static async bulan() {
+        const res = await axios.get(url + '/bulan')
+        return res.data
+    }
+
+
     // Get all
     static async all() {
         const res = await axios.get(url)

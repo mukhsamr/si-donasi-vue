@@ -26,9 +26,9 @@ export const useAuthStore = defineStore('auth', {
             // Cek LocalStorage
             const userStorage = localStorage.getItem('user')
 
-            if (userStorage != true) {
+            if (!Boolean(userStorage)) {
                 const res = await Auth.find().catch(err => err)
-                if (res.nama) localStorage.setItem('user', res.nama)
+                if (res.name) localStorage.setItem('user', res.name)
             }
 
             this.authUser = localStorage.getItem('user')

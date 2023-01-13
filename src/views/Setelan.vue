@@ -5,33 +5,57 @@ import { onBeforeMount, reactive, ref } from "vue";
 const form = reactive({
     _method: 'patch',
     id: '',
-    nama: '',
+    name: '',
     password: ''
 })
-const message = ref()
+
+const rules = [(value) => !!value || "Kolom harus diisi"]
+const inputs = ref()
+const loading = ref()
+const alert = reactive({
+    type: '',
+    message: ''
+})
 
 
 async function update() {
-    const res = await Auth.update(form)
-    window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: 'smooth'
-    })
 
-    message.value = res.message
+    const validate = await inputs.value.validate()
 
-    setTimeout(() => {
-        message.value = null
-    }, 3000);
+    if (validate) {
+        loading.value = true
+
+        await Auth.update(form)
+            .then(res => {
+                alert.type = 'success'
+                alert.message = res.message
+            })
+            .catch(e => {
+                alert.type = 'error'
+                alert.message = e.response.data.error
+            })
+            .finally(() => {
+                loading.value = false
+
+                window.scrollTo({
+                    top: 0,
+                    left: 0,
+                    behavior: 'smooth'
+                })
+
+                setTimeout(() => {
+                    alert.message = null
+                }, 3000);
+            })
+    }
 }
 
 
 onBeforeMount(async () => {
-    const res = await Auth.find().catch(e => e)
+    const res = await Auth.find()
 
     form.id = res.id
-    form.nama = res.nama
+    form.name = res.name
 })
 
 </script>
@@ -41,15 +65,21 @@ onBeforeMount(async () => {
 
     <v-divider />
 
-    <v-alert type="success" class="my-3" v-if="message">
-        {{ message }}
+    <v-alert :type="alert.type" density="comfortable" v-if="alert.message">
+        {{ alert.message }}
     </v-alert>
 
-    <v-form @submit.prevent="update" class="mt-8 border pa-4">
-        <v-text-field v-model="form.nama" label="Username" prepend-icon="mdi-account"
+    <v-form ref="inputs" @submit.prevent="update" class="mt-8 border pa-4">
+        <v-text-field :rules="rules" v-model="form.name" label="Username" prepend-icon="mdi-account"
             variant="underlined"></v-text-field>
         <v-text-field v-model="form.password" label="Password baru" prepend-icon="mdi-lock"
             variant="underlined"></v-text-field>
-        <v-btn type="submit" color="primary">Simpan</v-btn>
+
+        <v-btn type="submit" color="primary" v-if="!loading">
+            Simpan
+        </v-btn>
+        <v-btn color="primary" disabled v-else>
+            <v-progress-circular indeterminate />
+        </v-btn>
     </v-form>
 </template>

@@ -29,4 +29,6 @@ onBeforeMount(async () => {
     <v-card class="border">
         <vue-pdf-embed :source="'data:application/pdf;base64,' + item.pdf"></vue-pdf-embed>
     </v-card>
+    <v-btn prepend-icon="mdi-download" color="green" class="mt-2" download
+        :href="'data:application/pdf;base64,' + item.pdf">Download</v-btn>
 </template>
