@@ -25,14 +25,17 @@ async function hapus(id) {
     }
 }
 
-onBeforeMount(async () => data.value = await Berita.all())
+
+const isLoading = ref(true)
+
+onBeforeMount(async () => {
+    data.value = await Berita.all()
+    isLoading.value = false
+})
+
 </script>
 
 <template>
-    <h2>Kabar Terkini</h2>
-
-    <v-divider class="mb-4"></v-divider>
-
     <v-alert type="success" class="my-3" v-if="message">
         {{ message }}
     </v-alert>
@@ -41,8 +44,14 @@ onBeforeMount(async () => data.value = await Berita.all())
         Tambah Berita
     </v-btn>
 
-    <v-row>
-        <v-col v-for="item in data" :key="item.id" cols="6" sm="4">
+    <v-row v-if="isLoading">
+        <v-col cols="12" md="6" v-for="i in 3">
+            <v-skeleton-loader class=" border" type="card-avatar, actions"></v-skeleton-loader>
+        </v-col>
+    </v-row>
+
+    <v-row v-else>
+        <v-col v-for="item in data" :key="item.id" cols="12">
             <v-card class="mx-auto" max-width="400" :to="`/berita-find/${item.id}`">
                 <v-img class="align-end text-white" height="150" :src="storage + '/images/' + item.gambar" cover>
                     <v-card-title>{{ item.judul }}</v-card-title>

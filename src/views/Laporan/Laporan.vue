@@ -23,15 +23,17 @@ async function hapus(id) {
     }
 }
 
-onBeforeMount(async () => laporan.value = await Laporan.all())
+
+const isLoading = ref(true)
+
+onBeforeMount(async () => {
+    laporan.value = await Laporan.all()
+    isLoading.value = false
+})
 
 </script>
 
 <template>
-    <h2>Laporan Keuangan</h2>
-
-    <v-divider class="my-3"></v-divider>
-
     <v-alert type="success" class="my-3" v-if="message">
         {{ message }}
     </v-alert>
@@ -40,9 +42,15 @@ onBeforeMount(async () => laporan.value = await Laporan.all())
         Tambah Laporan
     </v-btn>
 
-    <template v-for="(item, i) in laporan" :key="i">
-        <div>
-            <v-list-item :title="item.bulan" :subtitle="item.created" class="py-3" :to="'/laporan-find/' + item.id">
+    <v-row v-if="isLoading">
+        <v-col v-for="i in 5" cols="12">
+            <v-skeleton-loader type="list-item-avatar-two-line"></v-skeleton-loader>
+        </v-col>
+    </v-row>
+
+    <template v-else>
+        <div v-for="(item, i) in laporan" :key="i">
+            <v-list-item :title="item.bulan" :subtitle="item.created" class="py-5" :to="'/laporan-find/' + item.id">
                 <template v-slot:prepend>
                     <v-avatar color="blue">
                         <v-icon color="white">mdi-clipboard-text</v-icon>
@@ -54,6 +62,8 @@ onBeforeMount(async () => laporan.value = await Laporan.all())
                 <v-btn color="green" variant="text" :to="'/laporan-edit/' + item.id">Edit</v-btn>
                 <v-btn color="red" variant="text" @click="hapus(item.id)">Hapus</v-btn>
             </div>
+
+            <v-divider></v-divider>
         </div>
 
     </template>

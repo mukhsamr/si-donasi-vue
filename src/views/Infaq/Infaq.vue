@@ -31,15 +31,15 @@ async function hapus(id) {
 }
 
 
-onBeforeMount(async () => data.value = await Infaq.all())
+const isLoading = ref(true)
+onBeforeMount(async () => {
+    data.value = await Infaq.all()
+    isLoading.value = false
+})
 
 </script>
 
 <template>
-    <h2>Infaq</h2>
-
-    <v-divider class="mb-4" />
-
     <v-alert type="success" class="my-3" v-if="message">
         {{ message }}
     </v-alert>
@@ -48,7 +48,13 @@ onBeforeMount(async () => data.value = await Infaq.all())
         Tambah Kategori
     </v-btn>
 
-    <v-row>
+    <v-row v-if="isLoading">
+        <v-col cols="12" md="6" v-for="i in 3">
+            <v-skeleton-loader class=" border" type="card-avatar, actions"></v-skeleton-loader>
+        </v-col>
+    </v-row>
+
+    <v-row v-else>
         <v-col v-for="item in data" :key="item.id" cols="12" sm="4">
             <v-card class="mx-auto" max-width="400">
                 <v-img class="align-end text-white" height="200" :src="storage + '/images/' + item.gambar" cover>
@@ -78,7 +84,7 @@ onBeforeMount(async () => data.value = await Infaq.all())
                             @click="salin(item.rekening)">
                             Salin
                         </v-btn>
-                        <v-btn color="green mt-3" :to="'/payment/' + item.id">
+                        <v-btn color="green mt-3" :to="'/infaq-payment/' + item.id">
                             Infaq Sekarang
                         </v-btn>
                     </div>
@@ -97,7 +103,9 @@ onBeforeMount(async () => data.value = await Infaq.all())
                         </div>
                         <div>
                             <div class="font-weight-bold text-disabled">Dibutuhkan</div>
-                            <div class="font-weight-bold">Rp. {{ new Intl.NumberFormat('id-ID').format(item.target) }}
+                            <div class="font-weight-bold">Rp. {{
+                                new Intl.NumberFormat('id-ID').format(item.target)
+                            }}
                             </div>
                         </div>
                     </div>
@@ -112,6 +120,7 @@ onBeforeMount(async () => data.value = await Infaq.all())
                     </v-card-actions>
                 </div>
             </v-card>
+
         </v-col>
     </v-row>
 </template>

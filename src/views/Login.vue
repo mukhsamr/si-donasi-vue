@@ -38,9 +38,9 @@ async function login() {
 </script>
 
 <template>
-    <h2>Login</h2>
+    <h2 class="mt-2">Login</h2>
 
-    <v-divider class="mb-4" />
+    <v-divider class="my-4" />
 
     <v-form ref="inputs" @submit.prevent="login" class="px-6 py-4 border">
         <v-text-field v-model="form.name" class="mt-2" label="Username" prepend-icon="mdi-account" :rules="[rules]"

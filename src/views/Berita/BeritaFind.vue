@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeMount, reactive } from 'vue';
+import { onBeforeMount, reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import Berita from "@/api/Berita";
 
@@ -12,8 +12,12 @@ const item = reactive({
 })
 
 
+const isLoading = ref(true)
+
 onBeforeMount(async () => {
     const res = await Berita.find(route.params.id).catch((err) => err)
+
+    isLoading.value = false
 
     item.judul = res.judul
     item.deskripsi = res.deskripsi
@@ -24,7 +28,10 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-    <v-card>
+
+    <v-skeleton-loader type="image, article" v-if="isLoading"></v-skeleton-loader>
+
+    <v-card v-else>
         <v-img class="align-end text-white" height="200" :src="storage + '/images/' + item.gambar" cover>
             <v-card-title>{{ item.judul }}</v-card-title>
         </v-img>
